@@ -84,6 +84,7 @@ CREATE TABLE `listings` (
   `maxNights` int(11) NOT NULL,
   `numReviews` int(11) NOT NULL,
   `rating` decimal(13,2) NOT NULL,
+  `extId` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
