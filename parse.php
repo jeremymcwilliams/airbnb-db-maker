@@ -38,6 +38,12 @@ class parse{
         //works
        // $this->populateNeighborhoodsTable($data);
 
+        //works
+       //$this->populateRoomTypesTable($data);
+
+
+       
+
        // $this->loadListings($data);
 
 
@@ -110,39 +116,58 @@ class parse{
 
     }
 
-    function insertHoods($hoods){
-        $db=$this->dbConnect();
-
-        foreach ($hoods as $neighborhood){
-
-            try {
-                $stmt = $db->prepare("insert into neighborhoods (neighborhood) values (:neighborhood)");
-                
-                $stmt->execute(array(":neighborhood"=>$neighborhood));
-                $stmt->fetchAll(PDO::FETCH_ASSOC);
-                
-                /** see the resulting array **/
-                //var_dump($rows);
-                echo $db->lastInsertId();
-                
-    
-                
-                }
-            catch (Exception $e) {
-                
-                echo $e;
+    function populateRoomTypesTable($data){
+        $rts=array();
+        foreach($data as $item){
+            $roomType=$item[33];
+            if(!in_array($roomType, $rts)){
+                array_push($rts, $roomType);
             }
 
-
         }
+        echo count($rts);
+        var_dump($rts);
+        $this->insertRoomTypes($rts);
 
-
-        
 
 
     }
 
 
+
+    function insertHoods($hoods){
+        $db=$this->dbConnect();
+
+        foreach ($hoods as $neighborhood){
+            try {
+                $stmt = $db->prepare("insert into neighborhoods (neighborhood) values (:neighborhood)");
+                
+                $stmt->execute(array(":neighborhood"=>$neighborhood));
+                $stmt->fetchAll(PDO::FETCH_ASSOC);
+                //echo $db->lastInsertId();               
+            }
+            catch (Exception $e) {               
+                echo $e;
+            }
+        }
+    }
+
+    function insertRoomTypes($roomTypes){
+        $db=$this->dbConnect();
+
+        foreach ($roomTypes as $roomType){
+            try {
+                $stmt = $db->prepare("insert into roomTypes (type) values (:roomType)");
+                
+                $stmt->execute(array(":roomType"=>$roomType));
+                $stmt->fetchAll(PDO::FETCH_ASSOC);
+                echo $db->lastInsertId();               
+            }
+            catch (Exception $e) {               
+                echo $e;
+            }
+        }
+    }
 
 }
 
