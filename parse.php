@@ -41,6 +41,9 @@ class parse{
         //works
        //$this->populateRoomTypesTable($data);
 
+        //works
+       //$this->populateAmenitiesTable($data);
+
 
        
 
@@ -132,6 +135,33 @@ class parse{
 
 
     }
+    function populateAmenitiesTable($data){
+        $amenities=array();
+        foreach($data as $item){
+            $ams=$item[39];
+
+            $listingsAms=json_decode($ams);
+
+            if($listingsAms){
+                foreach($listingsAms as $am){
+                    if(!in_array($am, $amenities)){
+                        array_push($amenities, $am);
+                    }
+    
+    
+                }
+            }
+        }
+       // echo count($rts);
+       // var_dump($rts);
+        $this->insertAmenities($amenities);
+      
+
+
+
+
+    }
+
 
 
 
@@ -168,6 +198,24 @@ class parse{
             }
         }
     }
+
+    function insertAmenities($amenities){
+        $db=$this->dbConnect();
+
+        foreach ($amenities as $amenity){
+            try {
+                $stmt = $db->prepare("insert into amenities (amenity) values (:amenity)");
+                
+                $stmt->execute(array(":amenity"=>$amenity));
+                $stmt->fetchAll(PDO::FETCH_ASSOC);
+                echo $db->lastInsertId();               
+            }
+            catch (Exception $e) {               
+                echo $e;
+            }
+        }
+    }
+
 
 }
 
