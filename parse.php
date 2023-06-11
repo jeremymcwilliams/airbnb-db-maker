@@ -47,19 +47,24 @@ class parse{
 
 
         //works
-        $this->populateNeighborhoodsTable($data);
+       // $this->populateNeighborhoodsTable($data);
 
         //works
-        $this->populateRoomTypesTable($data);
+       // $this->populateRoomTypesTable($data);
 
         //works
-       $this->populateAmenitiesTable($data);
+      // $this->populateAmenitiesTable($data);
 
         //works
-        $this->populateHostsTable($data);
+       // $this->populateHostsTable($data);
        
+        //works
+       // $this->loadListings($data);
 
-        $this->loadListings($data);
+
+        //works
+
+       //$this->populateListingAmenitiesTable($data);
 
 
 
@@ -241,6 +246,100 @@ class parse{
         $this->insertHosts($hosts);
  
     }
+
+    function populateListingAmenitiesTable($data){
+        $amenities=$this->getAllAmenities();
+        foreach($data as $item){
+            $extId=$item[0];
+            $listingId=$this->getListingId($extId);
+
+            echo $listingId."<br>";
+
+            $ams=$item[39];
+
+            $listingsAms=json_decode($ams);
+
+            if($listingsAms){
+                foreach($listingsAms as $am){
+                    //$amenityId=$this->getAmenityId($am);
+                    $amenityId=$amenities[$am];
+                    echo "<p>$listingId, $amenityId</p>";
+
+                    $this->insertListingAmenities($listingId, $amenityId);
+
+    
+    
+                }
+            }
+        }
+
+
+    }
+
+    function getAllAmenities(){
+        $amenities=array();
+        $db=$this->db;
+
+        try{
+            $stmt=$db->prepare("select * from amenities");
+            $stmt->execute();
+            $rows=$stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($rows as $row){
+                $id=$row["id"];
+                $am=$row["amenity"];
+                $amenities[$am]=$id;
+
+            }
+            return $amenities;
+
+ 
+
+        }
+        catch(Exception $e){
+
+        }
+
+
+
+    }
+
+    function getListingId($extId){
+        $db=$this->db;
+
+        try{
+            $stmt=$db->prepare("select id from listings where extId=:extId");
+            $stmt->execute(array(":extId"=>$extId));
+            $rows=$stmt->fetchAll(PDO::FETCH_ASSOC);
+            $id=$rows[0]["id"];
+            return $id;
+ 
+
+        }
+        catch(Exception $e){
+
+        }
+
+
+    }
+
+    function insertListingAmenities($listingId, $amenityId){
+        $db=$this->db;
+
+        try{
+            $stmt=$db->prepare("insert into listingAmenities (listingID, amenityID) values (:listingId, :amenityId)");
+            $stmt->execute(array(":listingId"=>$listingId, ":amenityId"=>$amenityId));
+            $stmt->fetchAll(PDO::FETCH_ASSOC);
+            echo $db->lastInsertId();
+
+
+        }
+        catch(Exception $e){
+
+        }
+
+
+    }
+
 
     function checkListing($extId){
         $db=$this->db;
