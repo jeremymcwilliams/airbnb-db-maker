@@ -25,7 +25,7 @@
 
 CREATE TABLE `amenities` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `amenity` varchar(300) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `amenity` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_amenity` (`id`,`amenity`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -37,13 +37,13 @@ CREATE TABLE `amenities` (
 
 CREATE TABLE `hosts` (
   `id` int(11) NOT NULL,
-  `hostUrl` text COLLATE utf8_unicode_ci NOT NULL,
-  `hostName` text COLLATE utf8_unicode_ci NOT NULL,
-  `hostLocation` text COLLATE utf8_unicode_ci NOT NULL,
-  `hostAbout` text COLLATE utf8_unicode_ci NOT NULL,
+  `hostUrl` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `hostName` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `hostLocation` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `hostAbout` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `superhost` tinyint(1) NOT NULL,
   `hostPic` text COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 
 
@@ -56,7 +56,7 @@ CREATE TABLE `listingAmenities` (
   `amenityID` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_amenityID` (`amenityID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 
@@ -65,28 +65,28 @@ CREATE TABLE `listingAmenities` (
 
 CREATE TABLE `listings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `listingUrl` text COLLATE utf8_unicode_ci NOT NULL,
-  `name` text COLLATE utf8_unicode_ci NOT NULL,
-  `description` text COLLATE utf8_unicode_ci NOT NULL,
-  `neighborhoodOverview` text COLLATE utf8_unicode_ci NOT NULL,
-  `pictureUrl` text COLLATE utf8_unicode_ci NOT NULL,
+  `listingUrl` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `neighborhoodOverview` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `pictureUrl` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `hostId` int(11) NOT NULL,
   `neighborhoodId` int(11) NOT NULL,
   `latitude` text COLLATE utf8_unicode_ci NOT NULL,
   `longitude` text COLLATE utf8_unicode_ci NOT NULL,
   `roomTypeId` int(11) NOT NULL,
-  `accommodates` int(11) NOT NULL,
-  `bathrooms` decimal(13,2) NOT NULL,
-  `bedrooms` decimal(13,2) NOT NULL,
-  `beds` decimal(13,2) NOT NULL,
+  `accommodates` int(11) ,
+  `bathrooms` decimal(13,2) ,
+  `bedrooms` decimal(13,2) ,
+  `beds` decimal(13,2) ,
   `price` decimal(13,2) NOT NULL,
-  `minNights` int(11) NOT NULL,
-  `maxNights` int(11) NOT NULL,
-  `numReviews` int(11) NOT NULL,
-  `rating` decimal(13,2) NOT NULL,
-  `extId` int(11) NOT NULL,
+  `minNights` int(11) ,
+  `maxNights` int(11) ,
+  `numReviews` int(11),
+  `rating` decimal(13,2),
+  `extId` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 
 
@@ -95,9 +95,9 @@ CREATE TABLE `listings` (
 
 CREATE TABLE `neighborhoods` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `neighborhood` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `neighborhood` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 
@@ -106,9 +106,9 @@ CREATE TABLE `neighborhoods` (
 
 CREATE TABLE `roomTypes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `type` text CHARACTER SET latin1 NOT NULL,
+  `type` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 
 
