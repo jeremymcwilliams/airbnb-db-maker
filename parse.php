@@ -44,27 +44,28 @@ class parse{
 
         
         $data=$this->readCsv();
+       // var_dump($data);
 
 
         //works
-       // $this->populateNeighborhoodsTable($data);
+        $this->populateNeighborhoodsTable($data);
 
         //works
-       // $this->populateRoomTypesTable($data);
+        $this->populateRoomTypesTable($data);
 
         //works
-      // $this->populateAmenitiesTable($data);
+       $this->populateAmenitiesTable($data);
 
         //works
-       // $this->populateHostsTable($data);
+        $this->populateHostsTable($data);
        
         //works
-       // $this->loadListings($data);
+        $this->loadListings($data);
 
 
         //works
 
-       //$this->populateListingAmenitiesTable($data);
+       $this->populateListingAmenitiesTable($data);
 
 
 
@@ -73,7 +74,7 @@ class parse{
 
 
     function readCsv(){
-        $filename = 'listings.csv';
+        $filename = 'listings2025.csv';
 
         // The nested array to hold all the arrays
         $the_big_array = []; 

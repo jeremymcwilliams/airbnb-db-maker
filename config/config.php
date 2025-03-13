@@ -5,7 +5,7 @@
 $database="fakeAirbnb";
 $server="localhost";
 $username="airbnbUser";
-$password="homes4RENT";
+$password="Portland2025";
 
 
 
