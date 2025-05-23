@@ -1,18 +1,21 @@
 <?php
+// Enable error reporting for debugging
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
+// Main class for parsing and importing Airbnb data
 class parse{
-    public $database;
-    public $server;
-    public $username;
-    public $password;
-    public $roomTypes;
-    public $db;
+    public $database;    // Database name
+    public $server;      // Database server
+    public $username;    // Database username
+    public $password;    // Database password
+    public $roomTypes;   // Cached room types (type => id)
+    public $db;          // PDO database connection
 
-
+    // Constructor: loads DB config and connects to DB
     function __construct(){
-        include("config/config.php");
+        include("config/config.php"); // Loads $database, $server, $username, $password
 
         $this->database=$database;
         $this->server=$server;
@@ -21,9 +24,9 @@ class parse{
 
         $db=$this->dbConnect();
         $this->db=$db;
-
     }
 
+    // Function to connect to the database using PDO
     function dbConnect(){
 
         /****** connect to database **************/
@@ -35,14 +38,11 @@ class parse{
             echo $e->getMessage();
         }
         return $db;
-
     }
 
+    // Main processing function: orchestrates the data import process
     function process(){
 
-
-
-        
         $data=$this->readCsv();
        // var_dump($data);
 
@@ -66,13 +66,9 @@ class parse{
         //works
 
        $this->populateListingAmenitiesTable($data);
-
-
-
-
     }
 
-
+    // Function to read CSV file and convert it to a nested array
     function readCsv(){
         $filename = 'listings2025.csv';
 
@@ -100,6 +96,7 @@ class parse{
         return $the_big_array;
     }
 
+    // Function to load listings data into the database
     function loadListings($data){
         $x=0;
         foreach($data as $item){
@@ -167,6 +164,7 @@ class parse{
 
     }
 
+    // Function to populate the neighborhoods table with unique neighborhoods from the data
     function populateNeighborhoodsTable($data){
         $hoods=array();
         foreach($data as $item){
@@ -181,6 +179,7 @@ class parse{
         $this->insertHoods($hoods);
     }
 
+    // Function to populate the room types table with unique room types from the data
     function populateRoomTypesTable($data){
         $rts=array();
         foreach($data as $item){
@@ -195,6 +194,7 @@ class parse{
         $this->insertRoomTypes($rts);
     }
 
+    // Function to populate the amenities table with unique amenities from the data
     function populateAmenitiesTable($data){
         $amenities=array();
         foreach($data as $item){
@@ -218,6 +218,7 @@ class parse{
       
     }
 
+    // Function to populate the hosts table with unique hosts from the data
     function populateHostsTable($data){
         $hosts=array();
         foreach($data as $item){
@@ -248,6 +249,7 @@ class parse{
  
     }
 
+    // Function to populate the listing amenities table with amenities for each listing
     function populateListingAmenitiesTable($data){
         $amenities=$this->getAllAmenities();
         foreach($data as $item){
@@ -277,6 +279,7 @@ class parse{
 
     }
 
+    // Function to retrieve all amenities from the database
     function getAllAmenities(){
         $amenities=array();
         $db=$this->db;
@@ -304,6 +307,7 @@ class parse{
 
     }
 
+    // Function to retrieve the listing ID for a given external ID
     function getListingId($extId){
         $db=$this->db;
 
@@ -323,6 +327,7 @@ class parse{
 
     }
 
+    // Function to insert a record into the listing amenities table
     function insertListingAmenities($listingId, $amenityId){
         $db=$this->db;
 
@@ -342,6 +347,7 @@ class parse{
     }
 
 
+    // Function to check if a listing already exists based on external ID
     function checkListing($extId){
         $db=$this->db;
 
@@ -358,6 +364,7 @@ class parse{
         }
     }
 
+    // Function to add a new listing to the database
     function addListing($listingUrl,$name,$description,$nho, $pictureUrl,$hostId, $hoodId, $latitude, $longitude, $roomTypeId, $accomodates, $bathrooms, $bedrooms, $beds,$price, $minNights, $maxNights, $numReviews, $rating, $extId){
         $db=$this->db;
         try {
@@ -386,6 +393,7 @@ class parse{
 
 
 
+    // Function to insert multiple neighborhoods into the database
     function insertHoods($hoods){
         $db=$this->db;
 
@@ -403,6 +411,7 @@ class parse{
         }
     }
 
+    // Function to insert multiple room types into the database
     function insertRoomTypes($roomTypes){
         $db=$this->db;
 
@@ -420,6 +429,7 @@ class parse{
         }
     }
 
+    // Function to insert multiple amenities into the database
     function insertAmenities($amenities){
         $db=$this->db;
 
@@ -437,6 +447,7 @@ class parse{
         }
     }
 
+    // Function to insert multiple hosts into the database
     function insertHosts($hosts){
 
         $db=$this->db;
@@ -469,6 +480,7 @@ class parse{
 
     }
 
+    // Function to retrieve the neighborhood ID for a given neighborhood name
     function getHoodId($hood){
         $db=$this->db;
         try {
@@ -487,6 +499,7 @@ class parse{
 
     }
 
+    // Function to retrieve the room type ID for a given room type name
     function getRoomTypeId($roomType){
         if(!isset($this->roomTypes)){
             $roomTypes=$this->setRoomTypes();
@@ -501,6 +514,7 @@ class parse{
 
     }
 
+    // Function to set and cache the room types from the database
     function setRoomTypes(){
         $db=$this->db;
         $roomTypes=array();
@@ -525,20 +539,13 @@ class parse{
         return $roomTypes;
 
     }
-
-
 }
 
+// Create an instance of the parse class and run the process function
 $parse=new parse();
-
 $parse->process();
 //$db=$parse->dbConnect();
-
 //$parse->readCsv();
-
 //$csv = array_map('str_getcsv', file('listings.csv'));
-
 //var_dump($csv);
-
-
 ?>
